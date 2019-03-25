@@ -1,40 +1,142 @@
 <template>
-  <div>
-    <div class="header">首页>用户管理>用户列表</div>
-    <div class="search">
-      <input type="text" placeholder="请输入搜索内容">
-      <a href="">添加用户</a>
+<div class="box-card">
+  <el-card class="box-card">
+    <!-- 卡片头部 -->
+    <div slot="header" class="clearfix">
+      <!-- 面包屑路径导航组件 -->
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+        <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
+
+    <el-row :gutter="20">
+      <el-col :span="4">
+        <el-input
+          placeholder="请输入内容"
+          v-model="searchText">
+          <i slot="prefix" class="el-input__icon el-icon-search"></i>
+        </el-input>
+      </el-col>
+      <el-col :span="4">
+        <el-button type="primary" @click="addFormVisible = true">添加用户</el-button>
+      </el-col>
+    </el-row>
+    <!-- 卡片内容 -->
+    <!--
+      表格组件
+   data 是表格的数据
+   stripe 斑马纹
+   el-table-column 表格列组件
+     你只需要设计表格列：列名+列值
+     label 列名
+     prop 数据名
+     width 列宽，默认 px
+   它内部会自动去遍历 data 数据，循环生成表格列
+   添加用户对话框
+   title 对话框标题
+   visible 布尔值，对话框是否显示
+     -->
+    <el-table
+      :data="users"
+      style="width: 100%">
+      <el-table-column
+        type="index">
+      </el-table-column>
+      <el-table-column
+        prop="username"
+        label="姓名"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="email"
+        label="邮箱"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="mobile"
+        label="电话">
+      </el-table-column>
+    </el-table>
+  </el-card>
+
+  <!-- 添加用户对话框 -->
+  <el-dialog title="添加用户" :visible.sync="addFormVisible">
+  <el-form :model="addFormData">
+    <el-form-item label="用户名" :label-width="formLabelWidth">
+      <el-input v-model="addFormData.username" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="密码" :label-width="formLabelWidth">
+      <el-input v-model="addFormData.password" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="邮箱" :label-width="formLabelWidth">
+      <el-input v-model="addFormData.email" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="电话" :label-width="formLabelWidth">
+      <el-input v-model="addFormData.mobile" autocomplete="off"></el-input>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="addFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click.prevent="handleAdd">确 定</el-button>
   </div>
+</el-dialog>
+
+</div>
 </template>
 
 <script>
+import { getUserList, addUser } from '@/api/user'
+
 export default {
-  name:'user-list',
+  name: 'UserList',
   data () {
-    return {}
+    return {
+      users: [],
+      searchText: '',
+      addFormVisible: false,
+      addFormData: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: '',
+      },
+    }
   },
+  async created () {
+    console.log('2.token存在，进入了具体的业务组件')
+    // 除了登录接口，其他接口都需要身份令牌才能访问
+    // 所有需要授权(提供token)的接口都需要
+    // const { data } = await getUserList({pagesize: 1})
+    this.loadUsers()
+  },
+  methods: {
+    async loadUsers () {
+      const { data } = await getUserList({ pagenum: 1, pagesize: 100 })
+      this.users = data.users
+    },
+    async handleAdd () {
+      const { meta } = await addUser(this.addFormData)
+      if(meta.status === 201){
+        console.log(this.$refs.addFormEl)
+        // this.$refs.addFormEL.resetFields()  // 清空表单数据
+        this.addFormVisible = false  // 隐藏对话框
+        this.loadUsers()
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
-  .header{
-    padding:10px;
-    background-color: green;
-    height: 50px;
-    line-height: 50px;
-  }
-  .search input{
-    border: none;
-    outline-style: none;
-    height: 30px;
-    line-height: 30px;
-    vertical-align:top;
-  }
-  .search a{
-    padding: 5px;
-    line-height: 30px;
-    background-color: #fff;
-    text-decoration: none;
-  }
+div.box-card{
+  height: 100%;
+}
+/* .el-card{
+  height: 100%;
+} */
+.el-table{
+  margin-top: 15px;
+}
 </style>
