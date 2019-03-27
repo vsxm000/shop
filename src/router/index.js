@@ -4,6 +4,7 @@ import Login from '@/views/Login'
 import Layout from '@/views/Layout'
 import Home from '@/views/Home'
 import User from '@/views/User'
+import { getToken } from '@/utils/auth'
 
 Vue.use(Router)
 
@@ -27,7 +28,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
     return next()
   }
-  const token = window.localStorage.getItem('token')
+  const token = getToken()
   // 如果没有登录则转到跳转页
   if (!token) {
     return next('/login')

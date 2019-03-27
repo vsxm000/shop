@@ -1,5 +1,6 @@
 import axios from 'axios'
 import router from '@/router'
+import { getToken } from '@/utils/auth.js'
 
 // axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'  // 不建议这样写,防止路径多变
 const http = axios.create({
@@ -13,7 +14,7 @@ http.interceptors.request.use(function (config) {
   // 如果请求的路径不是login则给这个请求头添加token,验证是否登陆过
 
   if (config.url !== '/login') {
-    config.headers.Authorization = window.localStorage.getItem('token')
+    config.headers.Authorization = getToken()
   }
   return config
   // 请求通过的规则

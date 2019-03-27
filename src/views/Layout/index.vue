@@ -38,12 +38,10 @@ export default {
   height: 100%;
 }
 .el-aside {
-  background-color: yellowgreen;
   height: 100%;
 }
 .el-main {
   width: 100%;
-  background-color:skyblue;
   padding:0;
   margin: 0;
 }

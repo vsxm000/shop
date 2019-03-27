@@ -17,7 +17,8 @@
 </template>
 
 <script>
-import { login } from '@/api/index.js'
+import { login } from '@/api/index'
+import { setToken } from '@/utils/auth'
 
 export default {
   name: 'Login',
@@ -52,11 +53,12 @@ export default {
       })
     },
     async login () {
-      const { meta, data } = await login (this.user)
+      const { meta, data } = await login(this.user)
       // const token = data.data.token
       if (meta.status === 200) {
         alert(meta.msg)
-        window.localStorage.setItem('token', data.token)
+        // window.localStorage.setItem('token', data.token)
+        setToken(data.token)
         this.$router.replace('/')
       } else {
         alert(meta.msg)
