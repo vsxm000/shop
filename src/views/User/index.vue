@@ -1,16 +1,5 @@
 <template>
 <div class="box-card">
-  <el-card class="box-card">
-    <!-- 卡片头部 -->
-    <div slot="header" class="clearfix">
-      <!-- 面包屑路径导航组件 -->
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-        <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
-
     <el-row :gutter="20">
       <el-col :span="4">
         <!--
@@ -98,7 +87,6 @@
         </template>
       </el-table-column>
     </el-table>
-  </el-card>
 
   <!-- 添加用户对话框 -->
   <AddUser ref="addUserEl" v-on:add-success="loadUsers()"></AddUser>
@@ -158,7 +146,7 @@ export default {
       value: true,
       total: 0,
       currentPage: 1,
-      num:5
+      num: 5
     }
   },
   async created () {
@@ -228,7 +216,7 @@ export default {
 </script>
 
 <style scoped>
-/* .el-table{
+.el-table{
   margin-top: 15px;
-} */
+}
 </style>

@@ -5,6 +5,10 @@ import Layout from '@/views/Layout'
 import Home from '@/views/Home'
 import User from '@/views/User'
 import { getToken } from '@/utils/auth'
+import Roles from '@/views/Roles'
+import Rights from '@/views/Rights'
+import Goods from '@/views/Goods'
+import AddGoods from '@/views/Goods/add.vue'
 
 Vue.use(Router)
 
@@ -16,7 +20,11 @@ const router = new Router({
       component: Layout,
       children: [
         { path: '', component: Home },
-        { path: '/users', component: User }
+        { path: '/users', component: User },
+        { path: '/roles', component: Roles },
+        { path: '/rights', component: Rights },
+        { path: '/goods', component: Goods },
+        { path: 'toadd', component: AddGoods }
       ]
     }
   ]
